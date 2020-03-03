@@ -20,12 +20,6 @@ shinyServer(function(input, output) {
     df_titanic_training <- df_titanic_training[,-c(1)]
     mod_rf <- rpart(Survived ~ ., data = df_titanic_training, method = "class")
     
-    #rpart.plot(mod_rf)
-    #mtcars <- read.csv("mtcars.csv", header = TRUE)
-    mtcars$mpgsp <- ifelse(mtcars$mpg - 20 > 0, mtcars$mpg-20, 0)
-    model1 <- lm(hp ~ mpg, data = mtcars)
-    model2 <- lm(hp + mpgsp ~ mpg, data = mtcars)
-    
     model1Pred <- reactive({
         pclassInput <- as.numeric(input$Sel03_Class)
         SexInput <- input$Sel01_Sex
@@ -38,11 +32,6 @@ shinyServer(function(input, output) {
         paste0(format(as.numeric(pred[1,2])*100, digits = 2), "%")
     })
     
-    model2Pred <- reactive({
-        mpgInput <- input$sliderMPG
-        predict(model2, newdata = data.frame(mpg = mpgInput,
-                                             mpgsp = ifelse(mpgInput-20>0, mpgInput-20, 0)))        
-    })
     
     output$plot1 <- renderPlot({
         
@@ -53,9 +42,6 @@ shinyServer(function(input, output) {
     output$pred1 <- renderText({
         model1Pred()
     })
-    
-    output$pred2 <- renderText({
-        model2Pred()
-    })
+
     
 })

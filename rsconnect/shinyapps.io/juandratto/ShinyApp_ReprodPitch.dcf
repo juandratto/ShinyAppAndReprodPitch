@@ -1,0 +1,12 @@
+name: ShinyApp_ReprodPitch
+title: ShinyApp_ReprodPitch
+username:
+account: juandratto
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1881098
+bundleId: 2838649
+url: https://juandratto.shinyapps.io/ShinyApp_ReprodPitch/
+when: 1582932210.54111
+asMultiple: FALSE
+asStatic: FALSE

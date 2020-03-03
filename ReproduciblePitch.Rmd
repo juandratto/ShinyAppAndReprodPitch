@@ -11,25 +11,51 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## The sinking of the Titanic: predicting survival (ShinyApp)
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+We use the titanic dataset for write a shiny app for predict the survival probability in the sinking of the titanic.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+- The link of the app: <https://juandratto.shinyapps.io/ShinyApp_ReprodPitch/>.
+- The link of github repo: <https://github.com/juandratto/ShinyAppAndReprodPitch>.
 
-## Slide with Bullets
+For detailed information about the titanic dataset: <https://www.kaggle.com/c/titanic>.
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+## Titanic dataset analysis
 
-## Slide with R Output
+Selecting only the Pclass, Age, Sex and Embarking variables.
 
-```{r cars, echo = TRUE}
-summary(cars)
+```{r titanic, echo = TRUE,  message=FALSE}
+library(caret)
+library(rpart)
+
+set.seed(1234)
+df_titanic_training <- read.csv("titanic_train.csv")
+df_titanic_training <- df_titanic_training[,-c(1)]
+
+summary(df_titanic_training)
+
 ```
 
-## Slide with Plot
+## Using Random forest model
 
-```{r pressure}
-plot(pressure)
+```{r modrf, echo=FALSE, message=FALSE}
+library(rpart)
+library(rpart.plot)
+mod_rf <- rpart(Survived ~ ., data = df_titanic_training, method = "class")
+rpart.plot(mod_rf)
+
+```
+
+## Predicting Survival
+
+```{r pred01, echo=TRUE, message=FALSE}
+
+        pclassInput <- 1
+        SexInput <- "male"
+        AgeInput <- 33
+        EmbarkInput <- "C"
+        
+        newdata <- data.frame(Pclass = pclassInput, Sex = SexInput, Age = AgeInput, Embarked = EmbarkInput)
+        
+        pred <- predict(mod_rf, newdata = newdata)
+        paste0(format(as.numeric(pred[1,2])*100, digits = 2), "%")
 ```
 
